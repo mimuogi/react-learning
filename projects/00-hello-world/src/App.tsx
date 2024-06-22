@@ -8,9 +8,9 @@ export function App (){
      <FollowCard
         userName ="mimuogi" 
         name = "Miguel Alejandro Muñoz"
-        isFollowing ={false}
+        initialIsFollowing = {false}
         />
-
+    {/*Coments in JSX are not a recomended practice*/ }
     </section>
     )
    

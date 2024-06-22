@@ -1,5 +1,27 @@
-export function FollowCard({userName, name, isFollowing}:{userName: string, name:string, isFollowing:boolean}) {
-    console.log(isFollowing)
+import {useState} from 'react'
+
+export function FollowCard({userName, name, initialIsFollowing}:{userName: string, name:string, initialIsFollowing:boolean}) {
+    
+    const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
+
+    /*
+    const state = useState(false) -> Variable de estado
+    const is Following = state[0] -> Valor 0 del array es el valor actual
+    const setIsFollowing = state(1) -> Forma de actuaizar el valor del estado
+    */
+
+    //console.log('[FollowCard] render with userName: ', initialIsFollowing)
+
+    const text = isFollowing ? 'Following' : 'Follow'
+
+    const buttonClassName = isFollowing
+    ? 'joli-followCard-button is-following'
+    : 'joli-followCard-button'
+
+    const handleClick = () => {
+        setIsFollowing(!isFollowing)
+      }
+
     return (
 
         <article className='joli-followCard'>
@@ -15,14 +37,15 @@ export function FollowCard({userName, name, isFollowing}:{userName: string, name
                 </strong>
                 <span className = 'joli-followCard-ifoUserName'>
                     @{userName}
-                    </span>
+                </span>
             </div>
             </header>
 
             <aside>
-                <button className='joli-followCard-button'>
-                    Follow
-                    </button>
+            <button className={buttonClassName} onClick={handleClick}>
+                <span className='joli-followCard-text'>{text}</span>
+                <span className='joli-followCard-stopFollow'>Unfollow</span>
+            </button>
 
             </aside>
 
