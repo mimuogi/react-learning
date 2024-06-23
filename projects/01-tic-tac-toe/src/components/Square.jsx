@@ -1,9 +1,10 @@
-export const Square = ({children, isSelected, updatedBoard, index}) => {
+/* eslint-disable react/prop-types */
+export const Square = ({children, isSelected, updateBoard, index}) => {
 
     const className = `square ${isSelected ? 'is-selected' : ''}`
   
     const handleClick = () => {
-      updatedBoard(index)
+      updateBoard(index)
     }
   
     return (
