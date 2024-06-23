@@ -1,39 +1,12 @@
 /* eslint-disable react/prop-types */
 import {useState } from 'react'
+import { TURNS } from './constants.js'
+import { Square } from './components/Square.jsx'
+import confetti from "canvas-confetti"
+import { checkWinner, checkEndGame } from './logic/board.js'
+import {ModalWinner} from './components/ModalWinner.jsx'
 import './App.css'
 
-
-const TURNS = {
-  X: 'x',
-  O: 'o'
-}
-
-
-const Square = ({children, isSelected, updatedBoard, index}) => {
-
-  const className = `square ${isSelected ? 'is-selected' : ''}`
-
-  const handleClick = () => {
-    updatedBoard(index)
-  }
-
-  return (
-    <div onClick = {handleClick} className = {className} >
-      {children}
-    </div>
-  )
-}
-
-const WINNER_COMBOS = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6]
-]
 
 function App() {
   // States
@@ -41,29 +14,11 @@ function App() {
   const [turn, setTurn] = useState(TURNS.X)
   const [winner, setWinner] = useState(null) // null -> no winner yet, false -> draw
 
-  const checkWinner = (boardToCheck) => {
-    for (const combo of WINNER_COMBOS) {
-      const[a, b, c] = combo
-      if(
-        boardToCheck[a] &&
-        boardToCheck[a] === boardToCheck[b] &&
-        boardToCheck[a]=== boardToCheck[c]
-      ) 
-      {
-        return boardToCheck[a]
-      }
-    }
-    return null 
-
-  }
-
   const resetGame = () =>{
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
   }
-
-
 
   const updatedBoard = (index) => {
 
@@ -81,6 +36,7 @@ function App() {
     const newWinner = checkWinner(newBoard)
     if(newWinner)
     {
+      confetti()
       //La actualización de estados es ASINCRONA, no bloquea el codigo siguiente
       setWinner(newWinner)
       // alert.("Winner is ${turn}")
@@ -88,12 +44,6 @@ function App() {
       setWinner(false)
     }
   }
-
-  const checkEndGame = (newBoard) => {
-
-    return newBoard.every((square) => square != null)
-  }
-
 
   return (
     <main className='board'>
@@ -122,28 +72,9 @@ function App() {
           </Square>
         </section>
 
+      <ModalWinner resetGame = {resetGame} winner= {winner}>
 
-        
-        {winner != null && (
-          <section className='winner'>
-            <div className='text'>
-              <h2>
-                {
-                  winner === false ? 'Tie' : 'The winner is '
-                }
-              </h2>
-
-              <header className='win'>
-                {winner && <Square>{winner}</Square>} 
-              </header>
-
-              <footer>
-                <button onClick={resetGame}>Play again</button>
-              </footer>
-
-            </div>
-          </section>)
-          }  
+      </ModalWinner>
         
       </main>
   )
