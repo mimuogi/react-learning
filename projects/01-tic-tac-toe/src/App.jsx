@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TURNS } from './constants.js';
 import { Square } from './components/Square.jsx';
 import confetti from "canvas-confetti";
@@ -58,6 +58,11 @@ function App() {
       setWinner(false);
     }
   };
+
+
+  useEffect(()=>{
+    console.log("useEffect execution")
+  }, [])
 
   return (
     <main className='board'>
