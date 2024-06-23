@@ -84,7 +84,14 @@ function App() {
       //La actualización de estados es ASINCRONA, no bloquea el codigo siguiente
       setWinner(newWinner)
       // alert.("Winner is ${turn}")
+    } else if(checkEndGame(newBoard)){
+      setWinner(false)
     }
+  }
+
+  const checkEndGame = (newBoard) => {
+
+    return newBoard.every((square) => square != null)
   }
 
 
@@ -93,13 +100,13 @@ function App() {
       <h1>Tic Tac Toe</h1>
       <button onClick={resetGame}>Reset</button>
         <section className='game'>
-          {board.map((_, index) => {
+          {board.map((square, index) => {
             return (
                 <Square index={index} key = {index} updatedBoard={updatedBoard}>
                   {/* Se pasa la función y no la ejecución de la funcion (updateBoard()) porque si pasas la ejecución, la funcion se ejecuta cada vez que se renderiza el componente, y no solamente cuando se necesita (en el click)*/
                   }
                   
-                  {board[index]}
+                  {square}
                 </Square>
             )
           })}
@@ -122,13 +129,12 @@ function App() {
             <div className='text'>
               <h2>
                 {
-                  winner === false ? 'Draw' : 'The winner is '
+                  winner === false ? 'Tie' : 'The winner is '
                 }
               </h2>
 
               <header className='win'>
                 {winner && <Square>{winner}</Square>} 
-
               </header>
 
               <footer>
