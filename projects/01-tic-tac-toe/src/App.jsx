@@ -24,19 +24,62 @@ const Square = ({children, isSelected, updatedBoard, index}) => {
   )
 }
 
+const WINNER_COMBOS = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+]
+
 function App() {
-
+  // States
   const [board, setBoard] = useState(Array(9).fill(null))
-
   const [turn, setTurn] = useState(TURNS.X)
+  const [winner, setWinner] = useState(null) // null -> no winner yet, false -> draw
+
+  const checkWinner = (boardToCheck) => {
+    for (const combo of WINNER_COMBOS) {
+      const[a, b, c] = combo
+      if(
+        boardToCheck[a] &&
+        boardToCheck[a] === boardToCheck[b] &&
+        boardToCheck[a]=== boardToCheck[c]
+      ) 
+      {
+        return boardToCheck[a]
+      }
+    }
+    return null 
+
+  }
+
+
+
 
   const updatedBoard = (index) => {
+
+    if(board[index] || winner) return
+
+    // Se hace una copia porque es buena practica tratar las props y el estado como si fueran inmutables
+    // Hacer directamente board[index] = turn; estaría MAL porque puede crear problemas en el renderizado por modificar el state    
     const newBoard = [...board]
     newBoard[index] = turn
     setBoard(newBoard)
 
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
+
+    const newWinner = checkWinner(newBoard)
+    if(newWinner)
+    {
+      //La actualización de estados es ASINCRONA, no bloquea el codigo siguiente
+      setWinner(newWinner)
+      // alert.("Winner is ${turn}")
+    }
   }
 
 
@@ -65,6 +108,31 @@ function App() {
             {TURNS.O}
           </Square>
         </section>
+
+
+        
+        {winner != null && (
+          <section className='winner'>
+            <div className='text'>
+              <h2>
+                {
+                  winner === false ? 'Draw' : 'The winner is '
+                }
+              </h2>
+
+              <header className='win'>
+                {winner && <Square>{winner}</Square>} 
+
+              </header>
+
+              <footer>
+                <button>Play again</button>
+              </footer>
+
+            </div>
+          </section>)
+          }  
+        
       </main>
   )
 }
