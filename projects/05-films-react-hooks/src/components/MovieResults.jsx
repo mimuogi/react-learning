@@ -2,9 +2,9 @@ import { MoviePanel } from "./MoviePanel"
 
 function ListOfMovies({movies}) {
     return (
-        <ul>{
+        <ul className='movies'>{
           movies.map( movie =>
-          <li key={movie.id}>
+          <li className = 'movie' key={movie.id}>
           <MoviePanel movieInfo={movie}/>
         </li>
           )
